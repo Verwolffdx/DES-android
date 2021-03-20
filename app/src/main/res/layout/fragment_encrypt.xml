@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:paddingTop="?attr/actionBarSize"
+    tools:context=".ui.encrypt.EncryptFragment">
+
+    <EditText
+        android:id="@+id/inputTextEncrypt"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:background="@drawable/edit_text_background"
+        android:gravity="top"
+        android:hint="Введите текст"
+        android:inputType="textMultiLine"
+        android:padding="5dp"
+        android:textSize="20dp"
+        android:textCursorDrawable="@drawable/color_cursor"/>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:orientation="horizontal">
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_weight="3">
+
+            <RadioButton
+                android:id="@+id/inputKeyBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/black"
+                android:checked="true"
+                android:text="Ввести ключ"
+                android:textSize="15dp" />
+
+            <RadioButton
+                android:id="@+id/generateKeyBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/black"
+                android:text="Сформировать"
+                android:textSize="15dp" />
+        </RadioGroup>
+
+        <EditText
+            android:id="@+id/inputKeyEncrypt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_weight="4"
+            android:background="@drawable/edit_text_background"
+            android:hint="Ключ"
+            android:inputType="text"
+            android:padding="5dp"
+            android:textSize="20dp"
+            android:textCursorDrawable="@drawable/color_cursor"
+            android:maxLength="8"/>
+    </LinearLayout>
+
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/encryptBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Зашифровать"
+            android:textSize="15dp"
+            android:background="@drawable/button_solid"
+            android:textColor="@color/white"
+            android:layout_marginRight="5dp"/>
+
+        <Button
+            android:id="@+id/openFileBtnEnc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Открыть файл"
+            android:textSize="15dp"
+            android:background="@drawable/button_solid"
+            android:textColor="@color/white"
+            android:layout_marginLeft="5dp"/>
+
+
+    </LinearLayout>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginBottom="5dp"
+        android:background="@color/black" />
+
+    <Button
+        android:id="@+id/copyBtnEnc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:text="Копировать"
+        android:textSize="15dp"
+        android:background="@drawable/button_solid"
+        android:textColor="@color/white"/>
+
+    <EditText
+        android:id="@+id/outputTextEncrypt"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/edit_text_background"
+        android:gravity="top"
+        android:hint="Зашифрованный текст"
+        android:inputType="textMultiLine"
+        android:padding="5dp"
+        android:textSize="20dp"
+        android:textCursorDrawable="@drawable/color_cursor"
+        android:clickable="false"
+        android:cursorVisible="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"/>
+
+
+</LinearLayout>
