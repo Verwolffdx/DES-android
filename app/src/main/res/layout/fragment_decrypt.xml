@@ -114,15 +114,38 @@
         android:layout_marginBottom="5dp"
         android:background="@color/black" />
 
-    <Button
-        android:id="@+id/copyBtnDec"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:layout_marginBottom="5dp"
-        android:text="Копировать"
-        android:textSize="15dp"
-        android:background="@drawable/button_solid"
-        android:textColor="@color/white"/>
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/saveFileDecBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Сохранить"
+            android:textSize="15dp"
+            android:background="@drawable/button_solid"
+            android:textColor="@color/white"
+            android:layout_marginRight="5dp"/>
+
+        <Button
+            android:id="@+id/copyBtnDec"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Копировать"
+            android:textSize="15dp"
+            android:background="@drawable/button_solid"
+            android:textColor="@color/white"
+            android:layout_marginLeft="5dp"/>
+    </LinearLayout>
+
 
     <EditText
         android:id="@+id/outputTextDecrypt"

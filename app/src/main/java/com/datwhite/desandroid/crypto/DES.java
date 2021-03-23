@@ -1,4 +1,4 @@
-package com.datwhite.desandroid;
+package com.datwhite.desandroid.crypto;
 
 import java.util.Random;
 
