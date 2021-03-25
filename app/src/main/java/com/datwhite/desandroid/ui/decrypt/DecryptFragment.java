@@ -124,62 +124,78 @@ public class DecryptFragment extends Fragment {
                 String enc_to_dec_text = inputTextDecrypt.getText().toString();
                 String key_to_dec = inputKeyDecrypt.getText().toString();
 
-                byte[] decodedBytes = Base64.getDecoder().decode(enc_to_dec_text);
-                byte[] dec = DES.decrypt(decodedBytes, key_to_dec.getBytes());
-                String decrypted = new String(dec);
+                if (enc_to_dec_text.length() == 0 || key_to_dec.length() == 0) {
+                    Toast.makeText(root.getContext(), "Сначала ведите текст и ключ", Toast.LENGTH_LONG).show();
+                }
+                else if (key_to_dec.length() != 8) {
+                    Toast.makeText(root.getContext(), "Ключ должен быть длиной 8 символов", Toast.LENGTH_LONG).show();
+                }
+                else {
+                    byte[] decodedBytes = Base64.getDecoder().decode(enc_to_dec_text);
+                    byte[] dec = DES.decrypt(decodedBytes, key_to_dec.getBytes());
+                    String decrypted = new String(dec);
 
-                outputTextDecrypt.setText(decrypted);
+                    outputTextDecrypt.setText(decrypted);
+                }
             }
         });
 
+        //Копнка "Сохранить"
         saveFileDecBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int permissionStatus = ContextCompat.checkSelfPermission(root.getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
-
-                if (permissionStatus == PackageManager.PERMISSION_GRANTED) {
-                    System.out.println("ACCESS");
-                } else {
-                    System.out.println("DON'T ACCESS");
-                    ActivityCompat.requestPermissions(getActivity(), new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-                    System.out.println("THEN ACCESS");
+                if (inputKeyDecrypt.length() == 0 || outputTextDecrypt.length() == 0) {
+                    Toast.makeText(root.getContext(), "Сначала ведите текст и ключ", Toast.LENGTH_LONG).show();
                 }
+                else {
+                    int permissionStatus = ContextCompat.checkSelfPermission(root.getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
-                File path = new File(Environment.getExternalStorageDirectory().getAbsolutePath() +"/DES-test/");
-                path.mkdirs();
-                File file = new File(path, "decrypted.txt");
+                    if (permissionStatus == PackageManager.PERMISSION_GRANTED) {
+                        System.out.println("ACCESS");
+                    } else {
+                        System.out.println("DON'T ACCESS");
+                        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                        System.out.println("THEN ACCESS");
+                    }
 
-                try {
+                    File path = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/DES-test/");
                     path.mkdirs();
+                    File file = new File(path, "decrypted.txt");
 
-                    OutputStream os = new FileOutputStream(file);
-                    String key = "KEY " + inputKeyDecrypt.getText().toString();
-                    String enc = " CRYPT " + outputTextDecrypt.getText().toString();
-                    String text = key + enc;
-                    Log.i("TEXT", text);
-                    os.write(text.getBytes());
-                    os.flush();
-                    os.close();
+                    try {
+                        path.mkdirs();
 
-                    Toast.makeText(root.getContext(), "Файл сохранен", Toast.LENGTH_SHORT).show();
-                    // Tell the media scanner about the new file so that it is
-                    // immediately available to the user.
-                    MediaScannerConnection.scanFile(root.getContext(),
-                            new String[] { file.toString() }, null,
-                            new MediaScannerConnection.OnScanCompletedListener() {
-                                public void onScanCompleted(String path, Uri uri) {
-                                    Log.i("ExternalStorage", "Scanned " + path + ":");
-                                    Log.i("ExternalStorage", "-> uri=" + uri);
-                                }
-                            });
-                } catch (IOException e) {
-                    // Unable to create file, likely because external storage is
-                    // not currently mounted.
-                    Log.w("ExternalStorage", "Error writing " + file, e);
+                        OutputStream os = new FileOutputStream(file);
+                        String start = "ASU-LSTU";
+                        String key = " KEY " + inputKeyDecrypt.getText().toString();
+                        String enc = " CRYPT " + outputTextDecrypt.getText().toString();
+                        String text = start + key + enc;
+                        Log.i("TEXT", text);
+                        os.write(text.getBytes());
+                        os.flush();
+                        os.close();
+
+                        Toast.makeText(root.getContext(), "Файл сохранен", Toast.LENGTH_SHORT).show();
+                        // Tell the media scanner about the new file so that it is
+                        // immediately available to the user.
+                        MediaScannerConnection.scanFile(root.getContext(),
+                                new String[]{file.toString()}, null,
+                                new MediaScannerConnection.OnScanCompletedListener() {
+                                    public void onScanCompleted(String path, Uri uri) {
+                                        Log.i("ExternalStorage", "Scanned " + path + ":");
+                                        Log.i("ExternalStorage", "-> uri=" + uri);
+                                    }
+                                });
+                    } catch (IOException e) {
+                        // Unable to create file, likely because external storage is
+                        // not currently mounted.
+                        Log.w("ExternalStorage", "Error writing " + file, e);
+                    }
                 }
             }
         });
 
+        //Кнопка "Открыть файл"
         openFileBtnDec.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -188,14 +204,14 @@ public class DecryptFragment extends Fragment {
                 if (permissionStatus == PackageManager.PERMISSION_GRANTED) {
                     System.out.println("ACCESS");
                     Intent photoPickerIntent = new Intent(Intent.ACTION_GET_CONTENT);
-                    photoPickerIntent.setType("*/*");
+                    photoPickerIntent.setType("text/plain");
                     startActivityForResult(photoPickerIntent, 1);
                 } else {
                     System.out.println("DON'T ACCESS");
                     ActivityCompat.requestPermissions(getActivity(), new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
                     System.out.println("THEN ACCESS");
                     Intent photoPickerIntent = new Intent(Intent.ACTION_GET_CONTENT);
-                    photoPickerIntent.setType("*/*");
+                    photoPickerIntent.setType("text/plain");
                     startActivityForResult(photoPickerIntent, 1);
                 }
             }
@@ -251,11 +267,17 @@ public class DecryptFragment extends Fragment {
                         byte[] bytes = new byte[fin.available()];
                         fin.read(bytes);
                         String text = new String(bytes);
-                        System.out.println("TEXT: " + text);
-                        Toast.makeText(root.getContext(), text, Toast.LENGTH_SHORT).show();
+//                        System.out.println("TEXT: " + text);
+//                        Toast.makeText(root.getContext(), text, Toast.LENGTH_SHORT).show();
                         String[] words = text.split(" ");
-                        inputTextDecrypt.setText(words[3]);
-                        inputKeyDecrypt.setText(words[1]);
+                        Log.i("0", words[0]);
+                        if (!words[0].equals("ASU-LSTU")) {
+                            Toast.makeText(root.getContext(), "Неверный файл", Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            inputTextDecrypt.setText(words[4]);
+                            inputKeyDecrypt.setText(words[2]);
+                        }
                     } catch (IOException ex) {
 
                         Toast.makeText(root.getContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
